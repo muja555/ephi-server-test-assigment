@@ -2,6 +2,7 @@ import EphiTable from "./table.js";
 import {IEphi} from "./types.js";
 import {findMaxKey} from "../utils.js";
 import {Body, Controller, Get, Path, Post, Put, Route, SuccessResponse, Tags} from "tsoa";
+import CustomError from "../custome-error.class";
 
 
 @Route('/ephi')
@@ -14,7 +15,7 @@ export class EphiController extends Controller {
         const ephi = EphiTable.get(ephi_id);
 
         if (!ephi) {
-            throw new Error(`Ephi with ID ${ephi_id} not found`);
+            throw new CustomError(`Ephi with ID ${ephi_id} not found`, 404);
         }
 
         return ephi;
@@ -43,7 +44,7 @@ export class EphiController extends Controller {
         const ephi = EphiTable.get(ephi_id);
 
         if (!ephi) {
-            throw new Error(`Ephi with ID ${ephi_id} not found`);
+            throw new CustomError(`Ephi with ID ${ephi_id} not found`, 404);
         }
 
         const newEphi: IEphi = {...ephi, ...body};

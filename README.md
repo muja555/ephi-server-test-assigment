@@ -1,4 +1,5 @@
 # ephi-server-test-assigment
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D%20v14.0.0-brightgreen.svg)](https://nodejs.org/en/download/)
 
 server repo (nodejs):
 https://github.com/muja555/ephi-server-test-assigment/

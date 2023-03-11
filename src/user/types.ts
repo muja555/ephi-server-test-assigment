@@ -3,11 +3,8 @@ export interface RequestLogin extends Request {
     password: string;
 }
 
-export interface RequestUserEphiUpdate extends Request {
-    ephi_id: number;
-    params: {
-        user_id: number;
-    }
+export interface RequestUserUpdate extends Request {
+    ephi_id: number
 }
 
 export type IUser = {

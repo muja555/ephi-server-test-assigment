@@ -11,12 +11,13 @@ export type IEphi = {
     mrn: number; // Medical Record Number
 }
 
+export type IEphiBody = Omit<IEphi, 'ephi_id'>;
 
-export interface RequestPost extends Request, IEphi {
+export interface RequestCreate extends Request, IEphi {
 
 }
 
-export interface RequestPut extends Request, IEphi {
+export interface RequestUpdate extends Request, IEphi {
     params: {
         ephi_id: number;
     }

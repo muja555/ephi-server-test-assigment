@@ -1,47 +1,55 @@
-import {Request, Response} from 'express';
 import EphiTable from "./table.js";
-import {IEphi, RequestPost, RequestPut} from "./types.js";
+import {IEphi} from "./types.js";
 import {findMaxKey} from "../utils.js";
-
-export function get(req: Request, res: Response) {
-
-    const ephi_id = parseInt(req.params['ephi_id']);
-    const ephi = EphiTable.get(ephi_id);
-
-    if (ephi) {
-        res.status(200).json(ephi);
-    }
-    else {
-        res.status(404).send("Not Found");
-    }
-}
+import {Body, Controller, Get, Path, Post, Put, Route, SuccessResponse, Tags} from "tsoa";
 
 
-export function post(req: Omit<Request,'body'> & { body: RequestPost }, res: Response) {
-
-    const ephi = req.body;
-
-    const newId = findMaxKey(EphiTable) + 1;
-    const newEphi: IEphi = {...ephi, ephi_id: newId};
-
-    EphiTable.set(newId, newEphi);
-
-    res.status(200).json(newEphi);
-}
+@Route('/ephi')
+@Tags("Ephi")
+export class EphiController extends Controller {
 
 
-export function put(req: Omit<Request,'body'> & { body: RequestPut }, res: Response) {
+    @Get('/:ephi_id')
+    public async get(@Path() ephi_id: number): Promise<IEphi> {
+        const ephi = EphiTable.get(ephi_id);
 
-    const ephi = EphiTable.get(parseInt(req.params.ephi_id));
+        if (!ephi) {
+            throw new Error(`Ephi with ID ${ephi_id} not found`);
+        }
 
-    if (!ephi) {
-        res.status(404).send("Not Found");
-        return;
+        return ephi;
     }
 
-    const newEphi: IEphi = {...ephi, ...req.body};
-    EphiTable.set(ephi.ephi_id, newEphi);
+    @Post('/')
+    @SuccessResponse('200', 'OK')
+    public async create(
+        @Body() body: IEphi
+    ): Promise<IEphi> {
 
-    res.status(200).json(ephi);
+        const newId = findMaxKey(EphiTable) + 1;
+        const newEphi: IEphi = {...body, ephi_id: newId};
+        EphiTable.set(newId, newEphi);
+        return newEphi;
+    }
+
+
+    @Put('/{ephi_id}')
+    @SuccessResponse('200', 'OK')
+    public async updateEphi(
+        @Path() ephi_id: number,
+        @Body() body: IEphi
+    ): Promise<IEphi> {
+
+        const ephi = EphiTable.get(ephi_id);
+
+        if (!ephi) {
+            throw new Error(`Ephi with ID ${ephi_id} not found`);
+        }
+
+        const newEphi: IEphi = {...ephi, ...body};
+        EphiTable.set(ephi.ephi_id, newEphi);
+        return newEphi;
+    }
+
 }
 

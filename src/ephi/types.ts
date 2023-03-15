@@ -9,9 +9,8 @@ export type IEphi = {
     email: string;
     ssn: number; // Social Security Number
     mrn: number; // Medical Record Number
+    health_plan: number;
 }
-
-export type IEphiBody = Omit<IEphi, 'ephi_id'>;
 
 export interface RequestCreate extends Request, IEphi {
 
